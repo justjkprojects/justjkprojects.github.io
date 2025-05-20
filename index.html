@@ -25,16 +25,11 @@
         }
     </style>
     <script>
-        function redirectToPort(newPort) {
-        const currentUrl = window.location;
-        const newUrl = `${currentUrl.protocol}//${currentUrl.hostname}:${newPort}${currentUrl.pathname}${currentUrl.search}`;
-        window.location.href = newUrl;
-    }
-    function redirectToMailBox() {
-        window.location.href = '/viewInbox.html?lang=en&sessionid=9206382501';
+    function redirectToAI() {
+        window.location.href = '/GoogleGemini.html?lang=en&sessionid=dGhpc19pc19ub3RoaW5nX2p1c3RfZ2FyYmFnZV92YWx1ZQ==';
     }
     function redirectToDemo() {
-        window.location.href = '/viewDemo.html?lang=en&sessionid=4549010158';
+        window.location.href = '/viewDemo.html?lang=en&sessionid=dGhpc19pc19ub3RoaW5nX2p1c3RfZ2FyYmFnZV92YWx1ZQ==';
     }
     </script>
 </head>
@@ -52,7 +47,7 @@
         <div class="container">
             <h1>Welcome to the site</h1></div>
             <p>Streamlining Automation, Securing Infrastructure, Elevating the Web.</p>
-            <button class="btn btn-light" onclick="redirectToPort(911)">Explore Gemini</button>
+            <button class="btn btn-light" onclick="redirectToAI()">Explore Gemini</button>
             <button class="btn btn-light" onclick="redirectToMailBox()">Open Mailbox</button>
             <button class="btn btn-light" onclick="redirectToDemo()">View Demo</button>
         </div>
