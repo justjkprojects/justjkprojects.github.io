@@ -51,13 +51,11 @@ function setTime() {
   let now = new Date();
   now.setHours(h);
   now.setMinutes(m);
-
-  // Random seconds
   now.setSeconds(Math.floor(Math.random() * 60));
 
-  localStorage.setItem("customTime", now);
+  localStorage.setItem("customTime", now.toString());
 
-  alert("Time updated! Go back to clock.");
+  alert("Time set successfully!");
 }
 </script>
 
