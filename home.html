@@ -39,8 +39,6 @@ body {
 
 .number {
   position: absolute;
-  top: 50%;
-  left: 50%;
   font-size: 16px;
   font-weight: 500;
 }
@@ -51,8 +49,6 @@ body {
   width: 2px;
   height: 8px;
   background: black;
-  top: 50%;
-  left: 50%;
 }
 
 /* Hands */
@@ -63,23 +59,9 @@ body {
   transform-origin: bottom;
 }
 
-.hour {
-  width: 6px;
-  height: 70px;
-  background: black;
-}
-
-.minute {
-  width: 4px;
-  height: 100px;
-  background: black;
-}
-
-.second {
-  width: 2px;
-  height: 110px;
-  background: red;
-}
+.hour { width: 6px; height: 70px; background: black; }
+.minute { width: 4px; height: 100px; background: black; }
+.second { width: 2px; height: 110px; background: red; }
 </style>
 </head>
 
@@ -140,19 +122,15 @@ clock.appendChild(hour);
 clock.appendChild(minute);
 clock.appendChild(second);
 
-/* 🔥 FIX: Custom Time Support */
-let customTime = localStorage.getItem("customTime");
+/* 🔥 One-time custom time logic */
+let customTime = null;
 
-if (customTime) {
-  customTime = new Date(customTime);
+if (localStorage.getItem("customTime")) {
+  customTime = new Date(localStorage.getItem("customTime"));
+
+  // 🔥 Clear immediately so refresh resets
+  localStorage.removeItem("customTime");
 }
-
-/* Listen for updates */
-window.addEventListener("storage", function(e) {
-  if (e.key === "customTime") {
-    customTime = new Date(e.newValue);
-  }
-});
 
 /* Clock logic */
 function updateClock() {
