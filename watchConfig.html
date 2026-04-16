@@ -10,52 +10,74 @@
 <body class="bg-light">
 
 <div class="container mt-5">
-  <h3 class="text-center">Set Clock Time</h3>
+  <h3 class="text-center mb-4">Set Clock Time</h3>
 
-  <div class="card p-4 shadow">
-    
+  <div class="card shadow p-4">
+
+    <!-- Hours -->
     <div class="mb-3">
-      <label class="form-label">Hours</label>
-      <select id="hours" class="form-select">
-        <script>
-          for(let i=1;i<=12;i++){
-            document.write(`<option>${i}</option>`);
-          }
-        </script>
-      </select>
+      <label class="form-label">Hours (1–12)</label>
+      <select id="hours" class="form-select"></select>
     </div>
 
+    <!-- Minutes -->
     <div class="mb-3">
-      <label class="form-label">Minutes</label>
-      <select id="minutes" class="form-select">
-        <script>
-          for(let i=0;i<60;i++){
-            document.write(`<option>${i}</option>`);
-          }
-        </script>
-      </select>
+      <label class="form-label">Minutes (0–59)</label>
+      <select id="minutes" class="form-select"></select>
     </div>
 
-    <button onclick="setTime()" class="btn btn-success w-100">Set Time</button>
+    <!-- Buttons -->
+    <button onclick="setTime()" class="btn btn-success w-100">
+      Set Time
+    </button>
 
-    <a href="index.html" class="btn btn-secondary w-100 mt-2">Back to Clock</a>
+    <a href="index.html" class="btn btn-secondary w-100 mt-2">
+      Back to Clock
+    </a>
 
   </div>
 </div>
 
 <script>
+// Populate dropdowns
+const hours = document.getElementById("hours");
+const minutes = document.getElementById("minutes");
+
+for (let i = 1; i <= 12; i++) {
+  let opt = document.createElement("option");
+  opt.value = i;
+  opt.text = i;
+  hours.appendChild(opt);
+}
+
+for (let i = 0; i < 60; i++) {
+  let opt = document.createElement("option");
+  opt.value = i;
+  opt.text = i;
+  minutes.appendChild(opt);
+}
+
+// Set time
 function setTime() {
-  let h = document.getElementById("hours").value;
-  let m = document.getElementById("minutes").value;
+  let h = parseInt(hours.value);
+  let m = parseInt(minutes.value);
 
   let now = new Date();
+
+  // Convert to 24h format automatically
   now.setHours(h);
   now.setMinutes(m);
+
+  // Random seconds
   now.setSeconds(Math.floor(Math.random() * 60));
 
+  // Save to localStorage
   localStorage.setItem("customTime", now.toString());
 
   alert("Time set successfully!");
+
+  // Optional: auto redirect
+  window.location.href = "index.html";
 }
 </script>
 
