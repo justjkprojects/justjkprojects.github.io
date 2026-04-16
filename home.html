@@ -19,7 +19,6 @@ body { text-align: center; }
   background: white;
 }
 
-/* Center dot */
 .clock::after {
   content: '';
   width: 10px;
@@ -32,7 +31,6 @@ body { text-align: center; }
   border-radius: 50%;
 }
 
-/* Hands */
 .hand {
   position: absolute;
   bottom: 50%;
@@ -40,25 +38,10 @@ body { text-align: center; }
   transform-origin: bottom;
 }
 
-.hour {
-  width: 6px;
-  height: 60px;
-  background: black;
-}
+.hour { width: 6px; height: 60px; background: black; }
+.minute { width: 4px; height: 90px; background: black; }
+.second { width: 2px; height: 100px; background: red; }
 
-.minute {
-  width: 4px;
-  height: 90px;
-  background: black;
-}
-
-.second {
-  width: 2px;
-  height: 100px;
-  background: red;
-}
-
-/* Numbers */
 .number {
   position: absolute;
   font-size: 16px;
@@ -66,7 +49,6 @@ body { text-align: center; }
   transform: translate(-50%, -50%);
 }
 
-/* Ticks */
 .tick {
   position: absolute;
   width: 2px;
@@ -88,12 +70,11 @@ body { text-align: center; }
 <script>
 const clock = document.getElementById("clock");
 
-// Center and radius
 const centerX = 140;
 const centerY = 140;
 const radius = 110;
 
-// Numbers (perfect alignment)
+// Numbers
 for (let i = 1; i <= 12; i++) {
   let num = document.createElement("div");
   num.className = "number";
@@ -107,7 +88,7 @@ for (let i = 1; i <= 12; i++) {
   clock.appendChild(num);
 }
 
-// Ticks (skip top 12 tick)
+// Ticks (skip 12 top)
 for (let i = 0; i < 60; i++) {
   if (i === 0) continue;
 
@@ -134,9 +115,30 @@ clock.appendChild(hour);
 clock.appendChild(minute);
 clock.appendChild(second);
 
-// Clock logic
+// 🔥 IMPORTANT: Handle custom time
+let customTime = localStorage.getItem("customTime");
+
+if (customTime) {
+  customTime = new Date(customTime);
+}
+
+// Listen for updates from second page
+window.addEventListener("storage", function(e) {
+  if (e.key === "customTime") {
+    customTime = new Date(e.newValue);
+  }
+});
+
 function updateClock() {
-  const now = new Date();
+  let now;
+
+  if (customTime) {
+    now = new Date(customTime);
+    now.setSeconds(now.getSeconds() + 1);
+    customTime = now;
+  } else {
+    now = new Date();
+  }
 
   const sec = now.getSeconds();
   const min = now.getMinutes();
