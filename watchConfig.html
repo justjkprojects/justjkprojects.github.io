@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set Time</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+  <h3 class="text-center">Set Clock Time</h3>
+
+  <div class="card p-4 shadow">
+    
+    <div class="mb-3">
+      <label class="form-label">Hours</label>
+      <select id="hours" class="form-select">
+        <script>
+          for(let i=1;i<=12;i++){
+            document.write(`<option>${i}</option>`);
+          }
+        </script>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Minutes</label>
+      <select id="minutes" class="form-select">
+        <script>
+          for(let i=0;i<60;i++){
+            document.write(`<option>${i}</option>`);
+          }
+        </script>
+      </select>
+    </div>
+
+    <button onclick="setTime()" class="btn btn-success w-100">Set Time</button>
+
+    <a href="index.html" class="btn btn-secondary w-100 mt-2">Back to Clock</a>
+
+  </div>
+</div>
+
+<script>
+function setTime() {
+  let h = document.getElementById("hours").value;
+  let m = document.getElementById("minutes").value;
+
+  let now = new Date();
+  now.setHours(h);
+  now.setMinutes(m);
+
+  // Random seconds
+  now.setSeconds(Math.floor(Math.random() * 60));
+
+  localStorage.setItem("customTime", now);
+
+  alert("Time updated! Go back to clock.");
+}
+</script>
+
+</body>
+</html>
