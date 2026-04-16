@@ -10,8 +10,8 @@
 body { text-align: center; }
 
 .clock {
-  width: 260px;
-  height: 260px;
+  width: 280px;
+  height: 280px;
   border: 8px solid #333;
   border-radius: 50%;
   position: relative;
@@ -19,30 +19,61 @@ body { text-align: center; }
   background: white;
 }
 
-.hand {
+/* Center dot */
+.clock::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: black;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform-origin: 0% 50%;
-  transform: rotate(90deg);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+/* Hands */
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
 }
 
 .hour {
-  width: 70px;
-  height: 4px;
+  width: 6px;
+  height: 60px;
   background: black;
 }
 
 .minute {
-  width: 100px;
-  height: 3px;
+  width: 4px;
+  height: 90px;
   background: black;
 }
 
 .second {
-  width: 110px;
-  height: 2px;
+  width: 2px;
+  height: 100px;
   background: red;
+}
+
+/* Numbers */
+.number {
+  position: absolute;
+  font-size: 16px;
+  font-weight: bold;
+  transform: translate(-50%, -50%);
+}
+
+/* Ticks */
+.tick {
+  position: absolute;
+  width: 2px;
+  background: black;
+  top: 0;
+  left: 50%;
+  transform-origin: bottom;
 }
 </style>
 </head>
@@ -51,56 +82,77 @@ body { text-align: center; }
 
 <div class="container">
   <h3 class="mt-4">Analog Clock</h3>
-
-  <div class="clock">
-    <div id="hour" class="hand hour"></div>
-    <div id="minute" class="hand minute"></div>
-    <div id="second" class="hand second"></div>
-  </div>
-
-  <a href="set_time.html" class="btn btn-primary">Set Time</a>
+  <div class="clock" id="clock"></div>
 </div>
 
 <script>
-let customTime = null;
+const clock = document.getElementById("clock");
 
-// Reset on refresh
-window.onload = () => {
-  localStorage.removeItem("customTime");
-};
+// Center and radius
+const centerX = 140;
+const centerY = 140;
+const radius = 110;
 
-// Listen for updates from other page
-window.addEventListener("storage", function(e) {
-  if (e.key === "customTime") {
-    customTime = new Date(e.newValue);
-  }
-});
+// Numbers (perfect alignment)
+for (let i = 1; i <= 12; i++) {
+  let num = document.createElement("div");
+  num.className = "number";
 
+  let angle = (i - 3) * (Math.PI / 6);
+
+  num.style.left = centerX + radius * Math.cos(angle) + "px";
+  num.style.top = centerY + radius * Math.sin(angle) + "px";
+
+  num.innerText = i;
+  clock.appendChild(num);
+}
+
+// Ticks (skip top 12 tick)
+for (let i = 0; i < 60; i++) {
+  if (i === 0) continue;
+
+  let tick = document.createElement("div");
+  tick.className = "tick";
+
+  tick.style.height = (i % 5 === 0) ? "15px" : "8px";
+  tick.style.transform = `rotate(${i * 6}deg)`;
+
+  clock.appendChild(tick);
+}
+
+// Hands
+const hour = document.createElement("div");
+hour.className = "hand hour";
+
+const minute = document.createElement("div");
+minute.className = "hand minute";
+
+const second = document.createElement("div");
+second.className = "hand second";
+
+clock.appendChild(hour);
+clock.appendChild(minute);
+clock.appendChild(second);
+
+// Clock logic
 function updateClock() {
-  let now;
+  const now = new Date();
 
-  if (customTime) {
-    now = new Date(customTime);
-    now.setSeconds(now.getSeconds() + 1);
-    customTime = now;
-  } else {
-    now = new Date();
-  }
+  const sec = now.getSeconds();
+  const min = now.getMinutes();
+  const hr = now.getHours();
 
-  let sec = now.getSeconds();
-  let min = now.getMinutes();
-  let hr = now.getHours();
+  const secDeg = sec * 6;
+  const minDeg = min * 6 + sec * 0.1;
+  const hrDeg = (hr % 12) * 30 + min * 0.5;
 
-  let secDeg = (sec * 6) + 90;
-  let minDeg = (min * 6) + (sec * 0.1) + 90;
-  let hrDeg = ((hr % 12) * 30) + (min * 0.5) + 90;
-
-  document.getElementById("second").style.transform = `rotate(${secDeg}deg)`;
-  document.getElementById("minute").style.transform = `rotate(${minDeg}deg)`;
-  document.getElementById("hour").style.transform = `rotate(${hrDeg}deg)`;
+  second.style.transform = `rotate(${secDeg}deg)`;
+  minute.style.transform = `rotate(${minDeg}deg)`;
+  hour.style.transform = `rotate(${hrDeg}deg)`;
 }
 
 setInterval(updateClock, 1000);
+updateClock();
 </script>
 
 </body>
